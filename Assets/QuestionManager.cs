@@ -10,30 +10,33 @@ public class QuestionManager : MonoBehaviour
 
     [Header("")] [SerializeField] private string answer;
 
-    private Action<QuestionAnswer> _afterQuestionGeneration;
+    //private Action<QuestionAnswer> _afterQuestionGeneration;
 
     public event Action OnGameWin;
 
     private void Start()
-    {
-        _afterQuestionGeneration += LogQuestion;
-        _afterQuestionGeneration += LogAnswer;
-
-        GenerateQuestion(_afterQuestionGeneration);
-
+    { 
+        // _afterQuestionGeneration += LogQuestion;
+        // _afterQuestionGeneration += LogAnswer;
+       // GenerateQuestion(_afterQuestionGeneration);
+       
+       //Generate another question
+       GenerateQuestion();
+                        
         OnGameWin += () => {answerInputField.text = "Well done, you cleared the wave";
                             messageBoxTextField.text = "Wave cleared";
                             };
         
     }
 
-    private void GenerateQuestion(Action<QuestionAnswer> afterqgCallback = null)
+    //private void GenerateQuestion(Action<QuestionAnswer> afterqgCallback = null)
+    //Generate a question 
+    private void GenerateQuestion()
     {
         if (monsterManager.monstersList.Count == 0)
         {
             Debug.LogWarning("Monsters list count is = 0");
             OnGameWin?.Invoke();
-
 
             ClearInputField();
             return;
@@ -44,16 +47,11 @@ public class QuestionManager : MonoBehaviour
                 .GetComponent<IQuestion>()
                 .GenerateQuestion();
 
-        afterqgCallback?.Invoke(qa);
-
         messageBoxTextField.text = qa.question;
         answer = qa.answer;
 
         ClearInputField("Enter your answer");
     }
-
-    private void LogQuestion(QuestionAnswer qa) => Debug.Log(qa.question);
-    private void LogAnswer(QuestionAnswer qa) => Debug.Log(qa.answer);
 
     public void ValidateAnswer()
     {

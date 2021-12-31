@@ -1,11 +1,21 @@
+using System;
 using TutorialAssets.Scripts;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class AddSubtractMonster : MonsterController, IQuestion
+public class AddSubtractMonster : MonsterController
 {
     public int maxOperand1 = 50;
     public int maxOperand2 = 50;
-    
+
+    public delegate QuestionAnswer MixedQuestion(QuestionAnswer questionAnswer);
+
+    public MixedQuestion mixedQuestion;
+
+    private void Start()
+    {
+        mixedQuestion += GenerateQuestion;
+    }
+
     public QuestionAnswer GenerateQuestion()
     {
         QuestionAnswer qa1;

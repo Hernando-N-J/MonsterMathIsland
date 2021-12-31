@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TutorialAssets.Scripts;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 public class MonsterManager : MonoBehaviour
@@ -15,6 +16,8 @@ public class MonsterManager : MonoBehaviour
     [SerializeField] private float waveDifficulty;
 
     public List<GameObject> monstersList;
+
+    public UnityEvent onMonsterKilled;
 
     private void Awake()
     {
@@ -90,6 +93,8 @@ public class MonsterManager : MonoBehaviour
 
     public void KillMonster(int monsterIndex)
     {
+        onMonsterKilled?.Invoke();
+        
         // Destroy gameobject and remove it from the list
         Destroy(monstersList[monsterIndex]);
         monstersList.RemoveAt(monsterIndex);
