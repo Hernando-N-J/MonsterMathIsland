@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -6,34 +7,53 @@ public class QuestionManager : MonoBehaviour
     [SerializeField] private MonsterManager monsterManager;
     [SerializeField] private TMP_Text messageBoxTextField;
     [SerializeField] private TMP_InputField answerInputField;
-    
-    [Header("")] 
-    [SerializeField] private string answer;
 
-    void Start()
+    [Header("")] [SerializeField] private string answer;
+
+    private Action<QuestionAnswer> _afterQuestionGeneration;
+
+    public event Action OnGameWin;
+
+    private void Start()
     {
-        GenerateQuestion();
+        _afterQuestionGeneration += LogQuestion;
+        _afterQuestionGeneration += LogAnswer;
+
+        GenerateQuestion(_afterQuestionGeneration);
+
+        OnGameWin += () => {answerInputField.text = "Well done, you cleared the wave";
+                            messageBoxTextField.text = "Wave cleared";
+                            };
+        
     }
 
-    private void GenerateQuestion()
+    private void GenerateQuestion(Action<QuestionAnswer> afterqgCallback = null)
     {
-        if (monsterManager.monstersList.Count <= 0)
+        if (monsterManager.monstersList.Count == 0)
         {
-            Debug.LogWarning("Monsters list count is <=0");
+            Debug.LogWarning("Monsters list count is = 0");
+            OnGameWin?.Invoke();
+
+
             ClearInputField();
             return;
         }
-        
-        var qa = 
+
+        var qa =
             monsterManager.monstersList[0]
-            .GetComponent<IQuestion>()
-            .GenerateQuestion();
-        
+                .GetComponent<IQuestion>()
+                .GenerateQuestion();
+
+        afterqgCallback?.Invoke(qa);
+
         messageBoxTextField.text = qa.question;
         answer = qa.answer;
-        
-        ClearInputField();
+
+        ClearInputField("Enter your answer");
     }
+
+    private void LogQuestion(QuestionAnswer qa) => Debug.Log(qa.question);
+    private void LogAnswer(QuestionAnswer qa) => Debug.Log(qa.answer);
 
     public void ValidateAnswer()
     {
@@ -42,18 +62,17 @@ public class QuestionManager : MonoBehaviour
             monsterManager.KillMonster(0);
             monsterManager.MonsterAttacks(0);
             monsterManager.MoveNextMonsterToQueue();
-           GenerateQuestion();
+            GenerateQuestion();
         }
         else
         {
-            Debug.Log("Check your answer");
-            ClearInputField();
+            ClearInputField("Incorrect answer. try again");
         }
     }
 
-    private void ClearInputField()
+    private void ClearInputField(string inputFieldPlaceHolder = "")
     {
-        answerInputField.text = "";
+        answerInputField.text = inputFieldPlaceHolder;
         answerInputField.ActivateInputField();
     }
 }

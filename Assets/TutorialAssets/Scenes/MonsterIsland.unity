@@ -329,6 +329,7 @@ GameObject:
   - component: {fileID: 146426771}
   - component: {fileID: 146426770}
   - component: {fileID: 146426772}
+  - component: {fileID: 146426773}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -378,7 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47226ad7da63ec74bb835c234cb16993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monstersAmount: 10
+  monstersAmount: 3
   monsterSpawnPoint: {fileID: 1245083040}
   attackPoint: {fileID: 1104829663}
   queuePoint: {fileID: 1315109885}
@@ -388,6 +389,18 @@ MonoBehaviour:
   - {fileID: 5108327301257936192, guid: 52a91a98b3bf6d847ab7815e3a2f8d18, type: 3}
   waveDifficulty: 0
   monstersList: []
+--- !u!114 &146426773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146426769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 263eb7c67e5d58348a70774e50a027a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &160684231
 GameObject:
   m_ObjectHideFlags: 0
